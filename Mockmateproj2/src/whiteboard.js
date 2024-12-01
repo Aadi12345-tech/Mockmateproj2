@@ -1,4 +1,3 @@
-// src/Whiteboard.js
 import React, { useState, useRef, useEffect } from 'react';
 import { io } from 'socket.io-client';
 
@@ -8,7 +7,7 @@ const Whiteboard = () => {
   const [userDrawings, setUserDrawings] = useState([]);
   const socket = useRef(null);
 
-  // Initialize WebSocket connection
+
   useEffect(() => {
     socket.current = new WebSocket('ws://localhost:5000');
 
@@ -30,20 +29,20 @@ const Whiteboard = () => {
     };
   }, []);
 
-  // Start drawing
+
   const startDrawing = (e) => {
     setIsDrawing(true);
     draw(e);
   };
 
-  // Stop drawing
+
   const stopDrawing = () => {
     setIsDrawing(false);
     const context = canvasRef.current.getContext('2d');
-    context.beginPath(); // End current path
+    context.beginPath(); 
   };
 
-  // Draw on canvas
+
   const draw = (e) => {
     if (!isDrawing) return;
     const context = canvasRef.current.getContext('2d');
@@ -55,7 +54,7 @@ const Whiteboard = () => {
     context.stroke();
   };
 
-  // Send drawing to server
+
   const sendDrawing = (e) => {
     if (!isDrawing) return;
     const data = {
@@ -66,16 +65,16 @@ const Whiteboard = () => {
     socket.current.send(JSON.stringify({ type: 'DRAW', data }));
   };
 
-  // Render previous drawings
+
   const drawOnCanvas = (context, drawing) => {
     context.lineTo(drawing.x, drawing.y);
     context.stroke();
   };
 
-  // Render the canvas based on previous drawings
+
   useEffect(() => {
     const context = canvasRef.current.getContext('2d');
-    context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height); // Clear canvas before redrawing
+    context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height); 
     userDrawings.forEach((drawing) => drawOnCanvas(context, drawing));
   }, [userDrawings]);
 
